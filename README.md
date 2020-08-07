@@ -1,4 +1,5 @@
-# steelpen
+# SteelPen
+[![time tracker](https://wakatime.com/badge/github/LuisOsuna117/SteelPen.svg)](https://wakatime.com/badge/github/LuisOsuna117/SteelPen)
 
 Blacksmith business ERP system developed in Flutter.
 
