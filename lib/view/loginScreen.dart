@@ -67,12 +67,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 20.0),
                         child: TextField(
                           controller: pass,
+                          obscureText: true,
                           decoration: InputDecoration(
                               labelText: 'Contraseña', icon: Icon(Icons.https)),
                         ),
                       ),
                       if (state is LogginInState)
-                        Padding(padding: EdgeInsets.all(20),child: CircularProgressIndicator(),)
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        )
                       else
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),

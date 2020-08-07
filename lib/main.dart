@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-        create: (_) => LoginBloc(logic: MainLogic()),
-        child: LoginScreen(),
+    create: (_) => LoginBloc(logic: MainLogic()),
+    child: LoginScreen(),
       ),
     );
   }
