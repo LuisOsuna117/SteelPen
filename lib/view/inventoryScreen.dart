@@ -42,7 +42,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
                   child: Text(
                     'Lista de material',
                     style:

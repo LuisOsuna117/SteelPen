@@ -1,128 +1,123 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:steelpen/components/recyclable/customDrawer.dart';
 import 'package:steelpen/components/recyclable/tableView.dart';
-import 'package:steelpen/logic/purchases/purchases_bloc.dart';
-import 'package:steelpen/logic/purchases/purchases_logic.dart';
+import 'package:steelpen/logic/sales/sales_bloc.dart';
+import 'package:steelpen/logic/sales/sales_logic.dart';
 
-class PurchasesScreen extends StatefulWidget {
+class SaleScreen extends StatefulWidget {
   @override
-  _PurchasesScreenState createState() => _PurchasesScreenState();
+  _SaleScreenState createState() => _SaleScreenState();
 }
 
-class _PurchasesScreenState extends State<PurchasesScreen> {
+class _SaleScreenState extends State<SaleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.lightBlue),
       ),
       drawer: CustomDrawer(),
-      body: BlocListener<PurchasesBloc, PurchasesState>(
-        listener: (context, state) {
-          if (state is RefreshPurchases) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => BlocProvider(
-                      create: (_) => PurchasesBloc(logic: MainLogic()),
-                      child: PurchasesScreen(),
-                    )));
-          }
-        },
-        child: BlocBuilder<PurchasesBloc, PurchasesState>(
-            builder: (BuildContext context, state) {
-          if (state is PurchasesInitial) {
-            BlocProvider.of<PurchasesBloc>(context).add(LoadPurchases());
-          }
-          return Column(
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Text(
-                          "Compras",
-                          style: TextStyle(
-                              color: Colors.lightBlue,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
+      backgroundColor: Colors.white,
+      body: BlocListener<SalesBloc, SalesState>(
+        listener: (context, state) {},
+        child: BlocBuilder<SalesBloc, SalesState>(
+          builder: (BuildContext context, state) {
+            if (state is SalesInitial) {
+              BlocProvider.of<SalesBloc>(context).add(LoadSales());
+            }
+            return Column(
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Text(
+                            "Ventas",
+                            style: TextStyle(
+                                color: Colors.lightBlue,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 14, 24, 0),
-                        child: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) => BlocProvider(
-                                      create: (_) =>
-                                          PurchasesBloc(logic: MainLogic()),
-                                      child: AddPurchaseScreen(),
-                                    )));
-                          },
-                          color: Colors.lightBlue,
-                          iconSize: 26,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              if (state is LoadingPurchases)
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 210, 0, 0),
-                  child: LoadingBouncingGrid.square(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 14, 24, 0),
+                          child: IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      BlocProvider(
+                                        create: (_) =>
+                                            SalesBloc(logic: SaLogic()),
+                                        child: AddSaleScreen(),
+                                      )));
+                            },
+                            color: Colors.lightBlue,
+                            iconSize: 26,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
-              if (state is LoadedPurchases)
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 1.27,
-                      child: TableView(
-                        list: state.list,
-                      )),
-                )
-            ],
-          );
-        }),
+                if (state is LoadingSales)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 210, 0, 0),
+                    child: LoadingBouncingGrid.square(),
+                  ),
+                if (state is LoadedSales)
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 1.27,
+                        child: TableView(
+                          list: state.list,
+                        )),
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-class AddPurchaseScreen extends StatefulWidget {
+class AddSaleScreen extends StatefulWidget {
   @override
-  _AddPurchaseScreenState createState() => _AddPurchaseScreenState();
+  _AddSaleScreenState createState() => _AddSaleScreenState();
 }
 
-class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
-  TextEditingController supplier;
+class _AddSaleScreenState extends State<AddSaleScreen> {
+  TextEditingController sale;
+  TextEditingController client;
+  TextEditingController description;
   TextEditingController product;
+  TextEditingController total;
   TextEditingController quantity;
-  TextEditingController price;
-
-  double purchaseTotal = 0.0;
 
   @override
   void initState() {
     super.initState();
-    supplier = TextEditingController();
+    sale = TextEditingController();
     product = TextEditingController();
     quantity = TextEditingController();
-    price = TextEditingController();
+    client = TextEditingController();
+    total = TextEditingController();
+    description = TextEditingController();
   }
 
   @override
@@ -136,23 +131,21 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
         iconTheme: IconThemeData(color: Colors.lightBlue),
       ),
       drawer: CustomDrawer(),
-      body: BlocListener<PurchasesBloc, PurchasesState>(
+      body: BlocListener<SalesBloc, SalesState>(
         listener: (context, state) {
-          if (state is RefreshPurchases) {
+          if (state is RefreshSales) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => BlocProvider(
-                      create: (_) => PurchasesBloc(logic: MainLogic()),
-                      child: PurchasesScreen(),
+                      create: (_) => SalesBloc(logic: SaLogic()),
+                      child: SaleScreen(),
                     )));
           }
         },
-        child: BlocBuilder<PurchasesBloc, PurchasesState>(
+        child: BlocBuilder<SalesBloc, SalesState>(
             builder: (BuildContext context, state) {
           if (state is AddedProducts) {
             listProducts = state.map;
             print(listProducts);
-            purchaseTotal = state.total;
-            print(purchaseTotal);
           }
           return ListView(
             children: <Widget>[
@@ -163,7 +156,7 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Agregar Compra",
+                      "Agregar Venta",
                       style: TextStyle(
                           color: Colors.lightBlue,
                           fontSize: 24,
@@ -179,11 +172,49 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                     child: Container(
                         width: MediaQuery.of(context).size.width / 1.115,
                         child: TextField(
-                          controller: supplier,
-                          decoration: InputDecoration(labelText: 'Proveedor'),
+                          controller: client,
+                          decoration: InputDecoration(labelText: 'Cliente'),
                         )),
                   ),
                 ],
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width / 1.63,
+                        child: TextField(
+                          controller: sale,
+                          decoration:
+                              InputDecoration(labelText: 'Nombre de la venta'),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Container(
+                      width: 100,
+                      child: TextField(
+                        controller: total,
+                        decoration: InputDecoration(labelText: 'Total'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: description,
+                        maxLines: 4,
+                        decoration: InputDecoration.collapsed(
+                            hintText: "Descripción de la venta"),
+                      ),
+                    )),
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
@@ -191,7 +222,7 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Añadir producto a la compra',
+                      'Material usado',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.0),
                     ),
@@ -220,20 +251,6 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                   )
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width / 1.115,
-                        child: TextField(
-                          controller: price,
-                          decoration:
-                              InputDecoration(labelText: 'Precio individual'),
-                        )),
-                  ),
-                ],
-              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -242,13 +259,11 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                     var tmp = {
                       "pname": product.text,
                       "pquantity": int.parse(quantity.text),
-                      "pprice": double.parse(price.text)
                     };
-                    BlocProvider.of<PurchasesBloc>(context)
+                    BlocProvider.of<SalesBloc>(context)
                         .add(AddProduct(map: listProducts, product: tmp));
                     product.text = '';
                     quantity.text = '';
-                    price.text = '';
                   },
                   child: Center(
                       child: Text(
@@ -277,10 +292,6 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 12,
                     ),
-                    Text(
-                      'Precio',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
                   ],
                 ),
               ),
@@ -288,7 +299,7 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                 Column(
                   children: <Widget>[
                     Container(
-                      height: 270,
+                      height: 180,
                       child: ListView.builder(
                           itemCount: state.map.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -310,18 +321,6 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                                         child: Center(
                                             child: Text(
                                                 "${listProducts[index]['pquantity']}"))),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                5,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Text(
-                                                "${listProducts[index]['pprice']}"),
-                                          ],
-                                        ))
                                   ],
                                 ),
                               ),
@@ -329,40 +328,19 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                           }),
                       color: Colors.black12,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Text("Total: ",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text("\$ $purchaseTotal")
-                        ],
-                      ),
-                    ),
                   ],
                 ),
-              if (state is PurchasesInitial)
+              if (state is SalesInitial)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height: 270,
+                      height: 180,
                       width: MediaQuery.of(context).size.width,
-                      child: Center(child: Text("No ha agregado ningun producto aun.")),
+                      child: Center(
+                          child: Text("No ha agregado ningun producto aun.")),
                       color: Colors.black12,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Text("Total: ",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text("\$ $purchaseTotal")
-                        ],
-                      ),
                     ),
                   ],
                 ),
@@ -371,20 +349,22 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: FlatButton(
                   onPressed: () {
-                    if (supplier.text.isNotEmpty) {
+                    if (client.text.isNotEmpty) {
                       var p = {
-                        "sname": supplier.text,
-                        "ptotal": purchaseTotal,
+                        "sname": sale.text,
+                        "desc": description.text,
+                        "total": double.parse(total.text),
+                        "cname": client.text,
                         "products": listProducts
                       };
                       print(p);
-                      BlocProvider.of<PurchasesBloc>(context)
-                          .add(AddPurchase(map: p));
+                      BlocProvider.of<SalesBloc>(context)
+                          .add(AddSale(map: p));
                     }
                   },
                   child: Center(
                       child: Text(
-                    'Agregar compra',
+                    'Agregar venta',
                     style: TextStyle(color: Colors.white),
                   )),
                   color: Colors.lightBlue,

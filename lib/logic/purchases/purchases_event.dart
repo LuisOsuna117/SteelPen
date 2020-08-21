@@ -22,6 +22,17 @@ class AddPurchase extends PurchasesEvent{
   AddPurchase({this.map});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [map];
+
+}
+
+class AddProduct extends PurchasesEvent{
+  final List<dynamic> map;
+  final dynamic product;
+
+  AddProduct({this.map,this.product});
+
+  @override
+  List<Object> get props => [map,product];
 
 }

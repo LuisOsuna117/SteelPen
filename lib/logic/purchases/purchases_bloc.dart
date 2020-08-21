@@ -37,5 +37,15 @@ class PurchasesBloc extends Bloc<PurchasesEvent, PurchasesState> {
         yield ErrorState("No pudieron cargar los datos.");
       }
     }
+    if (event is AddProduct){
+      List<dynamic> list = event.map;
+      double total = 0.0;
+      list.add(event.product);
+      list.forEach((p) {
+        print(p);
+        total += p['pquantity'] * p['pprice'];
+      });
+      yield AddedProducts(map: list,total: total);
+    }
   }
 }

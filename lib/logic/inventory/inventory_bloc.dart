@@ -17,7 +17,9 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     InventoryEvent event,
   ) async* {
     if (event is LoadInventory){
+      yield LoadingInventory();
       try{
+        await Future.delayed(Duration(seconds: 2));
         List<Product> result = await logic.loadPurchases();
         yield LoadedInventory(list: result);
       }on InventoryException{

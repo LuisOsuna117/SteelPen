@@ -35,8 +35,18 @@ class LoadedForm extends PurchasesState{
 
 class RefreshPurchases extends PurchasesState{
   @override
-  // TODO: implement props
   List<Object> get props => [];
+
+}
+
+class AddedProducts extends PurchasesState{
+  final List<dynamic> map;
+  final double total;
+
+  AddedProducts({this.map,this.total});
+
+  @override
+  List<Object> get props => [map,total];
 
 }
 

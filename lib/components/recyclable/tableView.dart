@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:steelpen/model/Client.dart';
 import 'package:steelpen/model/Product.dart';
 import 'package:steelpen/model/Purchases.dart';
+import 'package:steelpen/model/Supplier.dart';
+import 'package:steelpen/model/User.dart';
 
 class TableView extends StatefulWidget {
   final List<dynamic> list;
@@ -144,16 +147,177 @@ class _TableViewState extends State<TableView> {
           );
         },
       );
+    } else if (widget.list is List<Supplier> || widget.list is List<Client>) {
+      return ListView.builder(
+          itemCount: widget.list.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: Stack(
+                children: <Widget>[
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331257_1280.png'),
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(110, 10, 0, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Nombre: ' + widget.list[index].name),
+                        Text('Telefono: ' + widget.list[index].phone),
+                        Text('Correo: ' + widget.list[index].email),
+                        Text('Dirección: '),
+                        Text(
+                            "${widget.list[index].street}, ${widget.list[index].suburb}, ${widget.list[index].city}")
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+    } else if (widget.list is List<User>) {
+      return ListView.builder(
+          itemCount: widget.list.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: Stack(
+                children: <Widget>[
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331257_1280.png'),
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(110, 10, 0, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Nombre: ' + widget.list[index].name),
+                        Text('Telefono: ' + widget.list[index].phone),
+                        Text('Correo: ' + widget.list[index].email),
+                        Text('Dirección: '),
+                        Text(
+                            "${widget.list[index].street}, ${widget.list[index].suburb}, ${widget.list[index].city}")
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
     } else {
-      return ListView(
-        children: <Widget>[
-          Card(
+      return ListView.builder(
+        itemCount: widget.list.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
             child: ExpansionTile(
-              title: Text("Soy tipo venta"),
-              children: <Widget>[Text("Hola")],
+              title: Text('#'
+                  '${widget.list[index].saleId} ${widget.list[index].saleName}'),
+              children: <Widget>[
+                Text(
+                  'Descripcion:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(widget.list[index].saleDesc),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Cliente: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(widget.list[index].clientName),
+                  ],
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Producto',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Text(
+                              'Cantidad',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        )
+                      ],
+                    )),
+                Container(
+                  height: 100,
+                  child: ListView.builder(
+                    itemCount: widget.list[index].list.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                                width: MediaQuery.of(context).size.width / 1.35,
+                                child:
+                                    Text('${widget.list[index].list[i].name}')),
+                            Container(
+                                width: MediaQuery.of(context).size.width / 6.8,
+                                child: Center(
+                                    child: Text(
+                                        '${widget.list[index].list[i].quantity}'))),
+
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Total: ',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Text('${widget.list[index].saleTotal}')
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text('Fecha de compra: ',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Text('${widget.list[index].saleDate}')
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
+              ],
             ),
-          )
-        ],
+          );
+        },
       );
     }
   }

@@ -1,13 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:steelpen/logic/client/client_bloc.dart';
+import 'package:steelpen/logic/client/client_logic.dart';
 import 'package:steelpen/logic/inventory/inventory_bloc.dart';
 import 'package:steelpen/logic/inventory/inventory_logic.dart';
 import 'package:steelpen/logic/purchases/purchases_bloc.dart';
 import 'package:steelpen/logic/purchases/purchases_logic.dart';
+import 'package:steelpen/logic/sales/sales_bloc.dart';
+import 'package:steelpen/logic/sales/sales_logic.dart';
+import 'package:steelpen/logic/supplier/supplier_bloc.dart';
+import 'package:steelpen/logic/supplier/supplier_logic.dart';
+import 'package:steelpen/logic/user/user_bloc.dart';
+import 'package:steelpen/logic/user/user_logic.dart';
+import 'package:steelpen/view/ClientScreen.dart';
 import 'package:steelpen/view/homePage.dart';
 import 'package:steelpen/view/inventoryScreen.dart';
 import 'package:steelpen/view/purchasesScreen.dart';
+import 'package:steelpen/view/saleScreen.dart';
+import 'package:steelpen/view/supplierScreen.dart';
+import 'package:steelpen/view/userScreen.dart';
 
 class CustomDrawer extends StatefulWidget {
   final GestureTapCallback onTap;
@@ -42,7 +54,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               text: 'Compras',
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => BlocProvider(
+                    builder: (BuildContext context) =>
+                        BlocProvider(
                           create: (_) => PurchasesBloc(logic: MainLogic()),
                           child: PurchasesScreen(),
                         )));
@@ -50,15 +63,59 @@ class _CustomDrawerState extends State<CustomDrawer> {
           _createDrawerItem(
             icon: Icons.store,
             text: 'Ventas',
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      BlocProvider(
+                        create: (_) => SalesBloc(logic: SaLogic()),
+                        child: SaleScreen(),
+                      )));
+            }
           ),
           Divider(),
-          _createDrawerItem(icon: Icons.person, text: 'Proveedores'),
-          _createDrawerItem(icon: Icons.people, text: 'Empleados'),
-          _createDrawerItem(icon: Icons.storage, text: 'Inventario',onTap: () { Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => BlocProvider(
-                create: (_) => InventoryBloc(logic: ILogic()),
-                child: InventoryScreen(),
-              )));}),
+          _createDrawerItem(
+              icon: Icons.account_box, text: 'Clientes', onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    BlocProvider(
+                      create: (_) => ClientBloc(logic: CLogic()),
+                      child: ClientScreen(),
+                    )));
+          }),
+          _createDrawerItem(
+              icon: Icons.person,
+              text: 'Proveedores',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        BlocProvider(
+                          create: (_) => SupplierBloc(logic: SLogic()),
+                          child: SupplierScreen(),
+                        )));
+              }),
+          _createDrawerItem(
+              icon: Icons.people,
+              text: 'Empleados',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        BlocProvider(
+                          create: (_) => UserBloc(logic: ULogic()),
+                          child: UserScreen(),
+                        )));
+              }
+          ),
+          _createDrawerItem(
+              icon: Icons.storage,
+              text: 'Inventario',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        BlocProvider(
+                          create: (_) => InventoryBloc(logic: ILogic()),
+                          child: InventoryScreen(),
+                        )));
+              }),
           Divider(),
           _createDrawerItem(icon: Icons.exit_to_app, text: 'Cerrar sesión'),
         ],
